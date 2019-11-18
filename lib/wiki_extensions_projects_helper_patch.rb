@@ -18,23 +18,24 @@
 require_dependency 'projects_helper'
 
 module ProjectsHelperMethodsWikiExtensions
-    def self.included(base)
+  def self.included(base)
     base.class_eval do
       unloadable # Send unloadable so it will not be unloaded in development
       alias_method :project_settings_tabs_without_patch, :project_settings_tabs
       alias_method :project_settings_tabs, :project_settings_tabs_with_patch
     end
-  
+  end
+    
   def project_settings_tabs_with_patch
     tabs =  project_settings_tabs_without_patch
     action = {:name => 'wiki_extensions', 
-      :controller => 'wiki_extensions_settings', 
-      :action => :show, 
-      :partial => 'wiki_extensions_settings/show', 
-      :label => :wiki_extensions}
+              :controller => 'wiki_extensions_settings', 
+              :action => :show, 
+              :partial => 'wiki_extensions_settings/show', 
+              :label => :wiki_extensions}
 
     tabs << action if User.current.allowed_to?(action, @project)
-
+    
     tabs
   end
 end
